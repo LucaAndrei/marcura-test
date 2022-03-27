@@ -1,0 +1,54 @@
+<div class="item flex">
+  <div class="text-left">
+    {{expenseItem.name}}
+  </div>
+
+  <div class="text-left">
+    <span *ngIf="expenseItem?.costItemAlias?.accountingCode">
+      {{expenseItem.costItemAlias.accountingCode}}
+    </span>
+  </div>
+
+  <app-currency-amount
+    [baseCurrency]="baseCurrency"
+    [selectedCurrency]="selectedCurrency"
+    [amount]="quotedAmount"
+    [exchangeRate]="exchangeRate">
+  </app-currency-amount>
+
+  <app-currency-amount
+    [baseCurrency]="baseCurrency"
+    [selectedCurrency]="selectedCurrency"
+    [amount]="screenedAmount"
+    [isEditable]="true"
+    (onScreenedAmountChanged)="onScreenedAmountChanged($event)"
+    [exchangeRate]="exchangeRate">
+  </app-currency-amount>
+
+  <div class="comments flex" (click)="toggleComments()">
+    <mat-icon>chat_bubble_outline</mat-icon>
+    <span>{{expenseItem.comments?.length || 0}}</span>
+  </div>
+
+</div>
+
+<ng-container *ngIf="expenseItem.comments?.length && areCommentsVisible">
+  <app-cost-comment
+    *ngFor="let comment of expenseItem.comments"
+    [comment]="comment"
+    (onDelete)="onDelete(comment)"></app-cost-comment>
+    <div [formGroup]="addCommentForm">
+      <mat-form-field appearance="outline" class="comment-type">
+        <mat-label>Select comment type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of commentTypes" [value]="type">{{type}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="comment-edit-text">
+        <mat-label>Type comment</mat-label>
+        <input matInput placeholder="Type comment" formControlName="comment">
+      </mat-form-field>
+      <button class="comment-save" mat-raised-button (click)="addComment()">Add</button>
+    </div>
+
+</ng-container>

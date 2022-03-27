@@ -1,0 +1,38 @@
+.comment {
+    padding: 12px;
+    .comment-text {
+        display: flex;
+        align-items: center;
+        .type {
+            font-size: 12px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid darkcyan;
+            color: darkcyan;
+            margin-right: 24px;
+            &.external {
+                background-color: darkcyan;
+                color: #FFFFFF;
+            }
+        }
+    }
+    .comment-info {
+        display: flex;
+        align-items: center;
+        .author {
+            font-weight: 500;
+            color: darkcyan;
+            margin-right: 12px;
+        }
+        .date {
+            margin-right: 12px;
+        }
+    }
+    .actions {
+        mat-icon {
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+    }
+}

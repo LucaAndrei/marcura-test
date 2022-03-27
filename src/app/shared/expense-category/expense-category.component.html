@@ -1,0 +1,52 @@
+<div class="category flex flex-column">
+  <div class="category-header flex">
+    <div>
+      {{category.name}}
+    </div>
+    <div>
+      <span>Account code</span>
+    </div>
+    <div class="text-right">
+      Quoted
+    </div>
+    <div class="text-right">
+      Screened
+    </div>
+    <div></div>
+  </div>
+
+  <app-expense-category-item
+    *ngFor="let item of category.costItems"
+    [expenseItem]="item"
+    [selectedCurrency]="selectedCurrency"
+    [baseCurrency]="baseCurrency"
+    [exchangeRate]="exchangeRate"
+    (screenedAmountChanged)="onScreenedAmountChanged($event, item)"
+    ></app-expense-category-item>
+
+
+
+  <div class="total flex flex-spacing-between">
+    <span class="total-label">
+      Total
+    </span>
+    <div class="quoted-total">
+      <app-currency-amount
+        [baseCurrency]="baseCurrency"
+        [selectedCurrency]="selectedCurrency"
+        [amount]="totalQuotedAmount"
+        [exchangeRate]="exchangeRate">
+      </app-currency-amount>
+    </div>
+    <div class="screened-total">
+      <app-currency-amount
+        [baseCurrency]="baseCurrency"
+        [selectedCurrency]="selectedCurrency"
+        [amount]="totalScreenedAmount"
+        [exchangeRate]="exchangeRate">
+      </app-currency-amount>
+    </div>
+    <div></div>
+  </div>
+
+</div>

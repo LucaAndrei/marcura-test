@@ -1,0 +1,14 @@
+.header {
+    margin-bottom: 12px;
+    align-items: center;
+    .title {
+        text-transform: uppercase;
+        font-weight: 500;
+        color: darkcyan;
+    }
+    .select-currency {
+        span {
+            margin-right: 8px;
+        }
+    }
+}

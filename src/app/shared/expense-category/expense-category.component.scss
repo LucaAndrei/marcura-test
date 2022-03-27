@@ -1,0 +1,25 @@
+.category {
+  border: 1px solid darkcyan;
+  .category-header {
+    background-color: darkcyan;
+    color: white;
+    padding: 12px;
+    font-weight: 500;
+    > * {
+      flex: 1;
+    }
+  }
+  margin-bottom: 24px;
+}
+.total {
+  padding: 12px;
+  > * {
+    flex: 1;
+  }
+  .total-label {
+    flex: 2;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+}

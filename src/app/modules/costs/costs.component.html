@@ -1,0 +1,16 @@
+<div class="flex flex-space-between header">
+    <span class="title">COSTS</span>
+    <div class="select-currency">
+        <span>Currency</span>
+        <app-select-currency
+            [list]="exchangeRates.paymentCurrencies"
+            [selectedValue]="selectedCurrency"
+            (onItemSelected)="onCurrencyChange($event)"></app-select-currency>
+    </div>
+</div>
+<app-expense-category
+    *ngFor="let category of voyageCosts.costs"
+    [category]="category"
+    [baseCurrency]="baseCurrency"
+    [exchangeRate]="exchangeRate"
+></app-expense-category>

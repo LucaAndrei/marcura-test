@@ -1,0 +1,33 @@
+.item {
+  padding: 12px;
+  > * {
+    flex: 1;
+  }
+}
+.comments {
+  align-items: center;
+  justify-content: center;
+  mat-icon {
+    cursor: pointer;
+  }
+}
+app-cost-comment {
+  display: block;
+  border-bottom: 1px solid darkcyan;
+  &:last-child {
+    border-bottom: 2px solid darkcyan;
+  }
+}
+
+
+.comment-type {
+  margin-right: 8px;
+  width: 10%;
+}
+.comment-edit-text {
+  margin-right: 8px;
+  width: 80%;
+}
+.comment-save {
+  width: calc(100% - 10% - 80% - 8px - 8px);
+}

@@ -1,0 +1,30 @@
+<div class="comment flex flex-space-between" *ngIf="!isEditing" [formGroup]="form">
+  <div class="comment-text flex">
+    <div class="type" [class.external]="comment.type === 'External'">{{form.controls.type.value}}</div>
+    <div class="text">
+      {{form.controls.comment.value}}
+    </div>
+  </div>
+  <div class="comment-info">
+    <span class="author">{{comment.author}}</span>
+    <span class="date">{{comment.date | date: 'd MMM y h:mm'}}</span>
+    <span class="actions">
+      <mat-icon class="edit" (click)="edit()">edit</mat-icon>
+      <mat-icon class="delete" (click)="delete()">delete</mat-icon>
+    </span>
+  </div>
+</div>
+
+<div *ngIf="isEditing" [formGroup]="form" class="comment">
+  <mat-form-field appearance="outline" class="comment-type">
+    <mat-label>Select comment type</mat-label>
+    <mat-select formControlName="type">
+      <mat-option *ngFor="let type of commentTypes" [value]="type">{{type}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="comment-edit-text">
+    <mat-label>Type comment</mat-label>
+    <input matInput placeholder="Type comment" formControlName="comment">
+  </mat-form-field>
+  <button class="comment-save" mat-raised-button (click)="saveComment()">Save</button>
+</div>
