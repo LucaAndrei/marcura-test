@@ -7,7 +7,7 @@
       <mat-form-field appearance="outline" *ngIf="isEditable">
         <input matInput [formControl]="amountFormControl">
       </mat-form-field>
-      <span *ngIf="!isEditable">{{amount}}</span>
+      <span *ngIf="!isEditable">{{amount * exchangeRate | number : '1.2-2'}}</span>
     </span>
   </div>
   <div class="currency-info" *ngIf="baseCurrency">
