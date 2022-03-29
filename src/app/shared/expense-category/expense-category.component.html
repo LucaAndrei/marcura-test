@@ -20,7 +20,6 @@
     [expenseItem]="item"
     [selectedCurrency]="selectedCurrency"
     [baseCurrency]="baseCurrency"
-    [exchangeRate]="exchangeRate"
     (screenedAmountChanged)="onScreenedAmountChanged($event, item)"
     ></app-expense-category-item>
 
@@ -34,16 +33,14 @@
       <app-currency-amount
         [baseCurrency]="baseCurrency"
         [selectedCurrency]="selectedCurrency"
-        [amount]="totalQuotedAmount"
-        [exchangeRate]="exchangeRate">
+        [amount]="totalQuotedAmount">
       </app-currency-amount>
     </div>
     <div class="screened-total">
       <app-currency-amount
         [baseCurrency]="baseCurrency"
         [selectedCurrency]="selectedCurrency"
-        [amount]="totalScreenedAmount"
-        [exchangeRate]="exchangeRate">
+        [amount]="totalScreenedAmount">
       </app-currency-amount>
     </div>
     <div></div>

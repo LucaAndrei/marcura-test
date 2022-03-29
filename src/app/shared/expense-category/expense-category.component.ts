@@ -1,14 +1,12 @@
-import { Component, Input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
 import { ICostItem, IExpenseCategory, IVoyageCostBaseCurrency, PaymentType } from 'src/app/models';
-import { CostsService } from 'src/app/services/costs.service';
 
 @Component({
   selector: 'app-expense-category',
   templateUrl: './expense-category.component.html',
   styleUrls: ['./expense-category.component.scss']
 })
-export class ExpenseCategoryComponent implements OnDestroy {
+export class ExpenseCategoryComponent {
   @Input() set category(_category: IExpenseCategory) {
     this._category = _category;
     this.totalQuotedAmount = this._category.costItems
@@ -25,24 +23,17 @@ export class ExpenseCategoryComponent implements OnDestroy {
   get category() {
     return this._category;
   }
-  @Input() baseCurrency: IVoyageCostBaseCurrency;
-  @Input() exchangeRate: number;
 
-  selectedCurrency: string;
-  _category: IExpenseCategory;
+  @Input() baseCurrency: IVoyageCostBaseCurrency;
+  @Input() selectedCurrency: IVoyageCostBaseCurrency;
+
   totalQuotedAmount: number;
   totalScreenedAmount: number;
 
-  private selectedCurrency$: Subscription;
-  constructor(private costsService: CostsService) {
-    this.selectedCurrency$ = this.costsService.getSelectedCurrency().subscribe(res => {
-      this.selectedCurrency = res;
-    });
-  }
+  private _category: IExpenseCategory;
 
-  ngOnDestroy() {
-    this.selectedCurrency$.unsubscribe();
-  }
+  constructor() { }
+
   onScreenedAmountChanged(event: number, item: ICostItem) {
     const category = this._category.costItems.find(costItem => costItem.id === item.id)?.costs.find(cost => cost.type === PaymentType.Screened);
     category!.amount = event;

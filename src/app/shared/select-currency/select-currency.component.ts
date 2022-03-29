@@ -24,12 +24,11 @@ export class SelectCurrencyComponent implements OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes?.selectedValue?.currentValue) {
-      this.selectedCurrency.setValue(changes.selectedValue.currentValue)
+      this.selectedCurrency.setValue(changes.selectedValue.currentValue, { emitEvent: false })
     }
   }
 
   ngOnDestroy(): void {
     this.selectedCurrency$.unsubscribe();
   }
-
 }
