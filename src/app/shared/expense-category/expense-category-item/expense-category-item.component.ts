@@ -8,8 +8,7 @@ import { CommentType, IComment, ICostItem, IVoyageCostBaseCurrency, PaymentType 
   styleUrls: ['./expense-category-item.component.scss']
 })
 export class ExpenseCategoryItemComponent {
-  @Input() selectedCurrency: string;
-  @Input() exchangeRate: number;
+  @Input() selectedCurrency: IVoyageCostBaseCurrency;
   @Input() set expenseItem(_expenseItem: ICostItem) {
     this._expenseItem = _expenseItem;
     this.screenedAmount = this._expenseItem.costs.find(cost => cost.type === PaymentType.Screened)!.amount;
@@ -53,10 +52,18 @@ export class ExpenseCategoryItemComponent {
   }
 
   addComment() {
-    this._expenseItem.comments = [
-      ...this._expenseItem.comments,
-      this.addCommentForm.getRawValue()
-    ];
+    if (this._expenseItem.comments) {
+      this._expenseItem.comments = [
+        ...this._expenseItem.comments,
+        this.addCommentForm.getRawValue()
+      ];
+    } else {
+      this._expenseItem = {
+        ...this._expenseItem,
+        comments: [this.addCommentForm.getRawValue()]
+      }
+    }
+
     this.addCommentForm.setValue({
       type: null,
       comment: null

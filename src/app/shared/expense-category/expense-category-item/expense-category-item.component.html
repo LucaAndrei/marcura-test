@@ -12,8 +12,7 @@
   <app-currency-amount
     [baseCurrency]="baseCurrency"
     [selectedCurrency]="selectedCurrency"
-    [amount]="quotedAmount"
-    [exchangeRate]="exchangeRate">
+    [amount]="quotedAmount">
   </app-currency-amount>
 
   <app-currency-amount
@@ -21,8 +20,7 @@
     [selectedCurrency]="selectedCurrency"
     [amount]="screenedAmount"
     [isEditable]="true"
-    (onScreenedAmountChanged)="onScreenedAmountChanged($event)"
-    [exchangeRate]="exchangeRate">
+    (onScreenedAmountChanged)="onScreenedAmountChanged($event)">
   </app-currency-amount>
 
   <div class="comments flex" (click)="toggleComments()">
@@ -32,7 +30,7 @@
 
 </div>
 
-<ng-container *ngIf="expenseItem.comments?.length && areCommentsVisible">
+<ng-container *ngIf="areCommentsVisible">
   <app-cost-comment
     *ngFor="let comment of expenseItem.comments"
     [comment]="comment"
