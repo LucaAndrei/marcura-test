@@ -13,30 +13,36 @@ export class CostsComponent implements OnInit, OnDestroy {
   voyageCosts: IVoyageCosts;
   exchangeRates: IExchangeRate;
   baseCurrency: IVoyageCostBaseCurrency;
-  selectedCurrency: IVoyageCostBaseCurrency;
+  selectedCurrency: IVoyageCostBaseCurrency = { currency: '', exchangeRate: 0 };
   isLoading = true;
 
   selectedCurrency$: Observable<any>;
   private resolverData$: Subscription;
 
-  constructor(private activatedRoute: ActivatedRoute, private costsService: CostsService) {
-
-  }
+  constructor(private activatedRoute: ActivatedRoute, private costsService: CostsService) { }
 
   ngOnInit(): void {
     this.resolverData$ = this.activatedRoute.data.subscribe(resolverData => {
       this.voyageCosts = resolverData.voyageCosts;
       this.exchangeRates = resolverData.exchangeRates;
       this.baseCurrency = this.voyageCosts.baseCurrency;
-      this.costsService.selectCurrency(this.voyageCosts.daCurrency.currency, this.exchangeRates.paymentCurrencies);
-      this.selectedCurrency$ = this.costsService.getSelectedCurrency();
+      const currency = this.voyageCosts.daCurrency.currency;
+      const exchangeRate = this.exchangeRates.paymentCurrencies.find(pCurrency => pCurrency.toCurrency === currency)!.exchangeRate
+      this.selectedCurrency = {
+        currency,
+        exchangeRate
+      };
       this.isLoading = false;
     })
 
   }
 
   onCurrencyChange(selectedCurrency: string) {
-    this.costsService.selectCurrency(selectedCurrency, this.exchangeRates.paymentCurrencies);
+    const exchangeRate = this.exchangeRates.paymentCurrencies.find(pCurrency => pCurrency.toCurrency === selectedCurrency)!.exchangeRate
+    this.selectedCurrency = {
+      currency: selectedCurrency,
+      exchangeRate
+    };
   }
 
   ngOnDestroy(): void {
