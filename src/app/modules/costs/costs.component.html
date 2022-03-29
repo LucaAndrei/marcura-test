@@ -1,16 +1,24 @@
-<div class="flex flex-space-between header">
-    <span class="title">COSTS</span>
-    <div class="select-currency">
-        <span>Currency</span>
-        <app-select-currency
-            [list]="exchangeRates.paymentCurrencies"
-            [selectedValue]="selectedCurrency"
-            (onItemSelected)="onCurrencyChange($event)"></app-select-currency>
-    </div>
-</div>
-<app-expense-category
-    *ngFor="let category of voyageCosts.costs"
-    [category]="category"
-    [baseCurrency]="baseCurrency"
-    [exchangeRate]="exchangeRate"
-></app-expense-category>
+<ng-container *ngIf="{
+    isLoading: isLoading,
+    selectedCurrency : selectedCurrency$ | async
+} as context">
+    <ng-container *ngIf="!context.isLoading">
+        <div class="flex flex-space-between header">
+            <span class="title">COSTS</span>
+            <div class="select-currency">
+                <span>Currency</span>
+                <app-select-currency
+                    [list]="exchangeRates.paymentCurrencies"
+                    [selectedValue]="context.selectedCurrency.currency"
+                    (onItemSelected)="onCurrencyChange($event)"></app-select-currency>
+                <span>1 {{baseCurrency.currency}} = {{(context.selectedCurrency.exchangeRate / baseCurrency.exchangeRate) | number : '1.4-4'}} {{context.selectedCurrency.currency}}</span>
+            </div>
+        </div>
+        <app-expense-category
+            *ngFor="let category of voyageCosts.costs"
+            [category]="category"
+            [baseCurrency]="baseCurrency"
+            [selectedCurrency]="context.selectedCurrency"
+        ></app-expense-category>
+    </ng-container>
+</ng-container>
