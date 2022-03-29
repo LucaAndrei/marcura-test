@@ -10,17 +10,15 @@ import { IVoyageCostBaseCurrency } from 'src/app/models';
 })
 export class CurrencyAmountComponent implements OnInit, OnDestroy {
   @Input() baseCurrency: IVoyageCostBaseCurrency;
-  @Input() selectedCurrency: string;
+  @Input() selectedCurrency: IVoyageCostBaseCurrency;
   @Input() amount: number;
-  @Input() exchangeRate: number;
   @Input() isEditable = false;
   @Output() onScreenedAmountChanged = new EventEmitter<number>();
 
   amountFormControl = new FormControl('');
   private amount$: Subscription;
-  constructor() {
+  constructor() { }
 
-  }
   ngOnInit() {
     if (this.isEditable) {
       this.amountFormControl.setValue(this.amount);

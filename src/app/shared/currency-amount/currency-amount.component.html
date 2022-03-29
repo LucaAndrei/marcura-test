@@ -1,13 +1,13 @@
 <div class="quoted-amount flex-column text-right">
   <div class="quoted-currency">
     <span class="currency-info">
-      {{selectedCurrency}}
+      {{selectedCurrency.currency}}
     </span>
     <span class="amount">
       <mat-form-field appearance="outline" *ngIf="isEditable">
         <input matInput [formControl]="amountFormControl">
       </mat-form-field>
-      <span *ngIf="!isEditable">{{amount * exchangeRate | number : '1.2-2'}}</span>
+      <span *ngIf="!isEditable">{{amount * selectedCurrency.exchangeRate | number : '1.2-2'}}</span>
     </span>
   </div>
   <div class="currency-info" *ngIf="baseCurrency">
