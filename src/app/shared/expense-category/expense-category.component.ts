@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ICostItem, IExpenseCategory, IVoyageCostBaseCurrency, PaymentType } from 'src/app/models';
+import { getTotalAmountByPaymentType } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-expense-category',
@@ -9,16 +10,8 @@ import { ICostItem, IExpenseCategory, IVoyageCostBaseCurrency, PaymentType } fro
 export class ExpenseCategoryComponent {
   @Input() set category(_category: IExpenseCategory) {
     this._category = _category;
-    this.totalQuotedAmount = this._category.costItems
-      .map(costItem => costItem.costs)
-      .reduce((acc, curVal) => [...acc, ...curVal], [])
-      .filter(cost => cost.type === PaymentType.Quoted)
-      .reduce((acc, curVal) => acc + curVal.amount, 0);
-    this.totalScreenedAmount = this._category.costItems
-      .map(costItem => costItem.costs)
-      .reduce((acc, curVal) => [...acc, ...curVal], [])
-      .filter(cost => cost.type === PaymentType.Screened)
-      .reduce((acc, curVal) => acc + curVal.amount, 0);
+    this.totalQuotedAmount = getTotalAmountByPaymentType(this._category.costItems, PaymentType.Quoted);
+    this.totalScreenedAmount = getTotalAmountByPaymentType(this._category.costItems, PaymentType.Screened);
   }
   get category() {
     return this._category;
@@ -37,10 +30,6 @@ export class ExpenseCategoryComponent {
   onScreenedAmountChanged(event: number, item: ICostItem) {
     const category = this._category.costItems.find(costItem => costItem.id === item.id)?.costs.find(cost => cost.type === PaymentType.Screened);
     category!.amount = event;
-    this.totalScreenedAmount = this._category.costItems
-      .map(costItem => costItem.costs)
-      .reduce((acc, curVal) => [...acc, ...curVal], [])
-      .filter(cost => cost.type === PaymentType.Screened)
-      .reduce((acc, curVal) => acc + curVal.amount, 0);
+    this.totalScreenedAmount = getTotalAmountByPaymentType(this._category.costItems, PaymentType.Screened);
   }
 }

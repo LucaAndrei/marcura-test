@@ -10,7 +10,16 @@ import { IVoyageCostBaseCurrency } from 'src/app/models';
 })
 export class CurrencyAmountComponent implements OnInit, OnDestroy {
   @Input() baseCurrency: IVoyageCostBaseCurrency;
-  @Input() selectedCurrency: IVoyageCostBaseCurrency;
+  @Input() set selectedCurrency(_selectedCurrency: IVoyageCostBaseCurrency) {
+    this._selectedCurrency = _selectedCurrency;
+    if (this.isEditable) {
+      this.setAmount();
+    }
+  }
+  get selectedCurrency() {
+    return this._selectedCurrency;
+  }
+  private _selectedCurrency: IVoyageCostBaseCurrency;
   @Input() amount: number;
   @Input() isEditable = false;
   @Output() onScreenedAmountChanged = new EventEmitter<number>();
@@ -21,11 +30,15 @@ export class CurrencyAmountComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.isEditable) {
-      this.amountFormControl.setValue(this.amount);
-      this.amount$ = this.amountFormControl.valueChanges.subscribe(res => {
-        this.onScreenedAmountChanged.emit(parseFloat(res));
-      });
+      this.setAmount();
     }
+  }
+
+  private setAmount() {
+    this.amountFormControl.setValue((this.amount * this.selectedCurrency.exchangeRate).toFixed(2), {emitEvent: false});
+    this.amount$ = this.amountFormControl.valueChanges.subscribe(res => {
+      this.onScreenedAmountChanged.emit(parseFloat(res));
+    });
   }
 
   ngOnDestroy(): void {

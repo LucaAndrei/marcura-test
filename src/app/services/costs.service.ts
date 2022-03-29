@@ -1,20 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { IExchangeRate, IVoyageCosts } from '../models';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { IExchangeRate, IPaymentCurrency, IVoyageCostBaseCurrency, IVoyageCosts } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CostsService {
   private apiUrl = '../assets';
-  private selectedCurrency = new BehaviorSubject<string>('');
+  private selectedCurrency = new BehaviorSubject<IVoyageCostBaseCurrency>({ currency: '', exchangeRate: 0 });
 
   constructor(private http: HttpClient) { }
 
-  selectCurrency(currency: string) {
-    this.selectedCurrency.next(currency);
+  selectCurrency(currency: string, paymentCurrencies: IPaymentCurrency[]) {
+    const exchangeRate = paymentCurrencies.find(pCurrency => pCurrency.toCurrency === currency)!.exchangeRate
+    this.selectedCurrency.next({
+      currency,
+      exchangeRate
+    });
   }
 
   getSelectedCurrency() {
@@ -22,17 +25,7 @@ export class CostsService {
   }
 
   getCosts(): Observable<IVoyageCosts> {
-    return this.http.get<IVoyageCosts>(`${this.apiUrl}/costs.json`).pipe(
-      tap(voyageCosts => {
-        this.selectCurrency(voyageCosts.daCurrency.currency);
-      }),
-      map(voyageCosts => {
-        return {
-          ...voyageCosts,
-          costs: voyageCosts.costs.sort((a, b) => a.displayOrder - b.displayOrder)
-        }
-      })
-    );
+    return this.http.get<IVoyageCosts>(`${this.apiUrl}/costs.json`);
   }
 
   getExchangeRates(): Observable<IExchangeRate> {

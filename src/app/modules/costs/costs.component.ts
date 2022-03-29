@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IExchangeRate, IVoyageCostBaseCurrency, IVoyageCosts } from 'src/app/models';
 import { CostsService } from 'src/app/services/costs.service';
 
@@ -13,36 +13,33 @@ export class CostsComponent implements OnInit, OnDestroy {
   voyageCosts: IVoyageCosts;
   exchangeRates: IExchangeRate;
   baseCurrency: IVoyageCostBaseCurrency;
-  selectedCurrency: string;
-  exchangeRate: number;
+  selectedCurrency: IVoyageCostBaseCurrency;
+  isLoading = true;
 
-  private selectedCurrency$: Subscription;
+  selectedCurrency$: Observable<any>;
+  private resolverData$: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute, private costsService: CostsService) {
 
   }
 
   ngOnInit(): void {
-    this.voyageCosts = this.activatedRoute.snapshot.data.voyageCosts;
-    this.exchangeRates = this.activatedRoute.snapshot.data.exchangeRates;
-    this.baseCurrency = this.voyageCosts.baseCurrency;
-    this.selectedCurrency$ = this.costsService.getSelectedCurrency().subscribe(res => {
-      this.selectedCurrency = res;
-      this.exchangeRate = this.getExchangeRate(this.selectedCurrency);
-    });
+    this.resolverData$ = this.activatedRoute.data.subscribe(resolverData => {
+      this.voyageCosts = resolverData.voyageCosts;
+      this.exchangeRates = resolverData.exchangeRates;
+      this.baseCurrency = this.voyageCosts.baseCurrency;
+      this.costsService.selectCurrency(this.voyageCosts.daCurrency.currency, this.exchangeRates.paymentCurrencies);
+      this.selectedCurrency$ = this.costsService.getSelectedCurrency();
+      this.isLoading = false;
+    })
+
   }
 
   onCurrencyChange(selectedCurrency: string) {
-    this.costsService.selectCurrency(selectedCurrency);
-
-  }
-
-  private getExchangeRate(selectedCurrency: string) {
-    return this.exchangeRates.paymentCurrencies.find(currency => currency.toCurrency === selectedCurrency)!.exchangeRate;
+    this.costsService.selectCurrency(selectedCurrency, this.exchangeRates.paymentCurrencies);
   }
 
   ngOnDestroy(): void {
-    this.selectedCurrency$.unsubscribe();
+    this.resolverData$.unsubscribe();
   }
-
 }
